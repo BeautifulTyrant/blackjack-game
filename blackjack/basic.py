@@ -8,6 +8,9 @@ values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eig
 
 playing = True
 
+chip_total = 1000
+pnl = 0
+
 
 class Card:
 
@@ -62,14 +65,13 @@ class Hand:
 class Chips:
 
     def __init__(self):
-        self.total = 1000  # This can be set to a default value or supplied by a user input
         self.bet = 0
 
     def win_bet(self):
-        self.total += self.bet
+        return self.bet
 
     def lose_bet(self):
-        self.total -= self.bet
+        return -self.bet
 
 
 def take_bet(chips):
@@ -79,8 +81,8 @@ def take_bet(chips):
         except ValueError:
             print('Sorry, a bet must be an integer!')
         else:
-            if chips.bet > chips.total:
-                print("Sorry, your bet can't exceed", chips.total)
+            if chips.bet > chip_total:
+                print("Sorry, your bet can't exceed", chip_total)
             else:
                 break
 
@@ -98,15 +100,16 @@ def hit_or_stand(deck, hand):
 
         if x[0].lower() == 'h':
             hit(deck, hand)  # hit() function defined above
+            break
 
         elif x[0].lower() == 's':
             print("Player stands. Dealer is playing.")
             playing = False
+            break
 
         else:
-            print("Sorry, please try again.")
+            print("Try again.")
             continue
-        break
 
 
 def show_some(player, dealer):
@@ -147,10 +150,11 @@ def push(player, dealer):
     print("Dealer and Player tie! It's a push.")
 
 
+print('Welcome to BlackJack! Get as close to 21 as you can without going over!\nDealer hits until she reaches 17. '
+      'Aces count as 1 or 11.')
+print(f"Player starts with {chip_total} chips")
+
 while True:
-    # Print an opening statement
-    print('Welcome to BlackJack! Get as close to 21 as you can without going over!\n\
-    Dealer hits until she reaches 17. Aces count as 1 or 11.')
 
     # Create & shuffle the deck, deal two cards to each player
     deck = Deck()
@@ -165,7 +169,7 @@ while True:
     dealer_hand.add_card(deck.deal())
 
     # Set up the Player's chips
-    player_chips = Chips()  # remember the default value is 100
+    player_chips = Chips()
 
     # Prompt the Player for their bet
     take_bet(player_chips)
@@ -184,6 +188,8 @@ while True:
         # If player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
             player_busts(player_hand, dealer_hand, player_chips)
+            pnl += player_chips.lose_bet()
+            chip_total += player_chips.lose_bet()
             break
 
             # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
@@ -198,18 +204,25 @@ while True:
         # Run different winning scenarios
         if dealer_hand.value > 21:
             dealer_busts(player_hand, dealer_hand, player_chips)
+            pnl += player_chips.win_bet()
+            chip_total += player_chips.win_bet()
 
         elif dealer_hand.value > player_hand.value:
             dealer_wins(player_hand, dealer_hand, player_chips)
+            pnl += player_chips.lose_bet()
+            chip_total += player_chips.lose_bet()
 
         elif dealer_hand.value < player_hand.value:
             player_wins(player_hand, dealer_hand, player_chips)
+            pnl += player_chips.win_bet()
+            chip_total += player_chips.win_bet()
 
         else:
             push(player_hand, dealer_hand)
 
             # Inform Player of their chips total
-    print("\nPlayer's winnings stand at", player_chips.total)
+    print("\nPlayer's chip count stands at", chip_total)
+    print("Player's PnL stands at", pnl)
 
     # Ask to play again
     new_game = input("Would you like to play another hand? Enter 'y' or 'n' ")
