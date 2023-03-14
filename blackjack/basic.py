@@ -150,7 +150,7 @@ def push(player, dealer):
     print("Dealer and Player tie! It's a push.")
 
 
-print('Welcome to BlackJack! Get as close to 21 as you can without going over!\nDealer hits until she reaches 17. '
+print('Welcome to BlackJack! Get as close to 21 as you can without going over!\nDealer hits until it reaches 17. '
       'Aces count as 1 or 11.')
 print(f"Player starts with {chip_total} chips")
 
@@ -228,8 +228,12 @@ while True:
     new_game = input("Would you like to play another hand? Enter 'y' or 'n' ")
 
     if new_game[0].lower() == 'y':
-        playing = True
-        continue
+        if chip_total > 1:
+            playing = True
+            continue
+        else:
+            print("Out of chips. Thanks for playing!")
+            break
     else:
         print("Thanks for playing!")
         break
