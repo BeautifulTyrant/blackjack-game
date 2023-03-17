@@ -10,5 +10,8 @@
 # ranks = ('Ace', 'Ten') * 4
 # values = {'Ace': 11, 'Ten': 10}
 
+# ranks = ('Seven', 'Seven') * 4
+# values = {'Seven': 7, 'Ten': 10}
+
 # ranks = ('Ace', 'Ace') * 4
 # values = {'Ace': 11, 'Ten': 10}

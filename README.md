@@ -6,7 +6,7 @@ Includes:
 * Hit
 * Stand
 * Split
-
-Missing:
 * Double Down
+
+To Add:
 * Surrender

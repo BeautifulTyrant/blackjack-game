@@ -10,7 +10,7 @@ values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eig
           'Queen': 10, 'King': 10, 'Ace': 11}
 
 
-playing = True
+playing = True  # While loop controller
 
 chip_total = 1000  # Starting chip total
 pnl = 0
@@ -82,28 +82,56 @@ class Chips:
     def win_blackjack(self):
         return self.bet * 1.5
 
+    def dd_bet(self):
+        self.bet *= 2
+
     def lose_bet(self):
         return -self.bet
 
 
-def hit_or_stand(game_deck, hand):
+def player_action(game_deck, p_hand, d_hand):
     global playing  # to control an upcoming while loop
 
     while True:
-        x = input("Would you like to Hit or Stand? Enter 'h' or 's' ")
 
-        if x[0].lower() == 'h':
-            hit(game_deck, hand)  # hit() function defined above
-            break
-
-        elif x[0].lower() == 's':
-            print("Player stands. Dealer is playing.")
+        if p_hand.value == 21:
+            print("21!")
+            time.sleep(2.5)
             playing = False
             break
 
         else:
-            print("Try again.")
-            continue
+            x = input("Would you like to Hit, Stand or Double Down? Enter 'h', 's' or 'd': ")
+
+            if x[0].lower() == 'h':
+                hit(game_deck, p_hand)
+                time.sleep(1)
+                break
+
+            elif x[0].lower() == 's':
+                print("Player stands. Dealer is playing.")
+                time.sleep(1)
+                playing = False
+                break
+
+            elif x[0].lower() == 'd':
+                if len(player_hand) == 2:
+                    print("Player doubles down. Drawing last card. Bet 2x.")
+                    time.sleep(1)
+                    hit(game_deck, p_hand)
+                    show_some(p_hand, d_hand)
+                    time.sleep(1)
+                    player_chips.dd_bet()
+                    playing = False
+                    break
+                else:
+                    print("Cannot double down. More than 2 cards in hand.")
+                    time.sleep(2)
+                    break
+
+            else:
+                print("Try again.")
+                continue
 
 
 def split(player, dealer, chips):
@@ -122,7 +150,7 @@ def split(player, dealer, chips):
     while player_hand_1.value < 21:
         print("\nPlayer's Hand 1:", *player_hand_1.cards, sep='\n ')
         print("Player's Hand 1 =", player_hand_1.value)
-        x = input("Hand 1: Would you like to Hit or Stand? Enter 'h' or 's' ")
+        x = input("Hand 1: Would you like to Hit, Stand or Double Down? Enter 'h', 's' or 'd': ")
 
         if x[0].lower() == 'h':
             hit(deck, player_hand_1)  # hit() function defined above
@@ -134,6 +162,21 @@ def split(player, dealer, chips):
             print("\033[1mHand 1 stands.\033[0m")
             playing = False
             break
+
+        elif x[0].lower() == 'd':
+            if len(player_hand) == 2:
+                print("Player doubles down. Drawing last card. Bet 2x.")
+                time.sleep(1)
+                hit(deck, player_hand_1)
+                show_some(player_hand_1, dealer_hand)
+                time.sleep(2)
+                player_chips.dd_bet()
+                playing = False
+                break
+            else:
+                print("Cannot double down. More than 2 cards in hand.")
+                time.sleep(2)
+                break
 
         else:
             print("Try again.")
@@ -151,7 +194,7 @@ def split(player, dealer, chips):
     while player_hand_2.value < 21:
         print("\nPlayer's Hand 2:", *player_hand_2.cards, sep='\n ')
         print("Player's Hand 2 =", player_hand_2.value)
-        x = input("Hand 2: Would you like to Hit or Stand? Enter 'h' or 's' ")
+        x = input("Hand 2: Would you like to Hit, Stand or Double Down? Enter 'h', 's' or 'd': ")
 
         if x[0].lower() == 'h':
             hit(deck, player_hand_2)  # hit() function defined above
@@ -164,6 +207,21 @@ def split(player, dealer, chips):
             playing = False
             time.sleep(2)
             break
+
+        elif x[0].lower() == 'd':
+            if len(player_hand) == 2:
+                print("Player doubles down. Drawing last card. Bet 2x.")
+                time.sleep(1)
+                hit(deck, player_hand_2)
+                show_some(player_hand_2, dealer_hand)
+                time.sleep(2)
+                player_chips.dd_bet()
+                playing = False
+                break
+            else:
+                print("Cannot double down. More than 2 cards in hand.")
+                time.sleep(2)
+                break
 
         else:
             print("Try again.")
@@ -293,8 +351,8 @@ while True:
             show_all(player_hand, dealer_hand)
             print("\nBoth have Blackjack. Push")
 
-            print("\nPlayer's chip count stands at", chip_total)
-            print("Player's PnL stands at", pnl)
+            print("\nPlayer's chip count is at", chip_total)
+            print("Player's PnL is at", pnl)
 
             # Ask to play again
             new_game = input("\nWould you like to play another hand? Enter 'y' or 'n' ")
@@ -315,8 +373,8 @@ while True:
             chip_total += player_chips.win_blackjack()
             print("\033[1mBLACKJACK!\033[0m")
 
-            print("\nPlayer's chip count stands at", chip_total)
-            print("Player's PnL stands at", pnl)
+            print("\nPlayer's chip count is at", chip_total)
+            print("Player's PnL is at", pnl)
 
             # Ask to play again
             new_game = input("\nWould you like to play another hand? Enter 'y' or 'n' ")
@@ -337,8 +395,8 @@ while True:
             split_ask = input("\nSplit hands? (y/n): ")  # asking user if they want to split hands
             if split_ask.lower() == 'y':
                 split(player_hand, dealer_hand, player_chips)
-                print("\nPlayer's chip count stands at", chip_total)
-                print("Player's PnL stands at", pnl)
+                print("\nPlayer's chip count is at", chip_total)
+                print("Player's PnL is at", pnl)
 
                 # Ask to play again
                 new_game_if_split = input("\nWould you like to play another hand? Enter 'y' or 'n' ")
@@ -357,7 +415,7 @@ while True:
                 while playing:  # recall this variable from our hit_or_stand function
 
                     # Prompt for Player to Hit or Stand
-                    hit_or_stand(deck, player_hand)
+                    player_action(deck, player_hand, dealer_hand)
 
                     # Show cards (but keep one dealer card hidden)
                     show_some(player_hand, dealer_hand)
@@ -397,8 +455,8 @@ while True:
                     else:
                         push(player_hand, dealer_hand)
 
-                print("\nPlayer's chip count stands at", chip_total)
-                print("Player's PnL stands at", pnl)
+                print("\nPlayer's chip count is at", chip_total)
+                print("Player's PnL is at", pnl)
 
                 # Ask to play again
                 new_game = input("\nWould you like to play another hand? Enter 'y' or 'n' ")
@@ -417,7 +475,7 @@ while True:
         else:
             while playing:
 
-                hit_or_stand(deck, player_hand)
+                player_action(deck, player_hand, dealer_hand)
 
                 # keep dealer's card hidden
                 show_some(player_hand, dealer_hand)
@@ -461,8 +519,8 @@ while True:
                     print("\n")
                     push(player_hand, dealer_hand)
 
-            print("\nPlayer's chip count stands at", chip_total)
-            print("Player's PnL stands at", pnl)
+            print("\nPlayer's chip count is at", chip_total)
+            print("Player's PnL is at", pnl)
 
             # Ask to play again
             new_game = input("\nWould you like to play another hand? Enter 'y' or 'n' ")
