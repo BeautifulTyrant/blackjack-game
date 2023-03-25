@@ -19,5 +19,5 @@ It was not able to achieve this low of an edge.
 In the graph below, the edge was 3.16%, quite off the optimal window.
 
 <p align="center">
-<img alt="img_1.png" height="50%" src="img.png" width="50%"/>
+<img alt="results.png" height="50%" src=results.png" width="50%"/>
 </p>
