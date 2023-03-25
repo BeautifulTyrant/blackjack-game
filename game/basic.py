@@ -59,7 +59,7 @@ class Hand:
         self.value += values[card.rank]
         self.cards.append(card)
         if card.rank == 'Ace':
-            self.aces += 1  # add to self.aces
+            self.aces += 1
         while self.value > 21 and self.aces:
             self.value -= 10
             self.aces -= 1
