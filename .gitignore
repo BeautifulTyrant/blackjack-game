@@ -128,5 +128,6 @@ cython_debug/
  PyCharm
 .idea/
 
+# Other files
 strat.py
-results.png
+token.txt
