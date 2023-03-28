@@ -1,4 +1,6 @@
-### Blackjack Game
+# Blackjack
+
+### Game
 
 Creating a blackjack game while adding different features.
 
@@ -11,13 +13,13 @@ Includes:
 To Add:
 * Surrender
 
-### Blackjack Optimal Strategy Test
+### Optimal Strategy Test
 
 The test was done using online blackjack charts to see how close they can get to the optimal casino edge of ~0.5%.
-It was not able to achieve this low of an edge. 
+It was able to get pretty close to this edge.
 
-In the graph below, the edge was 3.16%, quite off the optimal window.
+In the graph below, the edge was 0.86%, quite close to the optimal window.
 
 <p align="center">
-<img alt="results.png" height="50%" src="optimal_strat/results.png" width="50%"/>
+<img alt="output.png" height="50%" src="optimal_strat/output.png" width="50%"/>
 </p>
