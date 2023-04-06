@@ -130,4 +130,7 @@ cython_debug/
 
 # Other files
 strat.py
+hi_low.py
 token.txt
+profile.prof
+output_full.png
